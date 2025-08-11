@@ -1,0 +1,9 @@
+---
+description: Auto-attach TS generation constraints for Horizon Worlds code
+globs: ["**/*.ts", "**/*.tsx", "scripts/**/*.ts", "src/**/*.ts"]
+---
+GENERATION CONSTRAINTS
+- Maak code die zonder extra tooling buildt (geen externe libs tenzij gevraagd).
+- Voeg minimale types toe aan parameters en returnwaarden.
+- Splits grote functies >40 regels op.
+- Output altijd in één codeblock, incl. korte usage (indien relevant).

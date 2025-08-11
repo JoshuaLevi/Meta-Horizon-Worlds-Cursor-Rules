@@ -1,0 +1,11 @@
+---
+description: Testing & review playbook for Horizon Worlds TS
+---
+CHECKLIST
+- Interface check: klopt event-naam + payload shape?
+- Performance: vermijd per-frame allocs; throttle handlers waar mogelijk.
+- Failure paths: wat als `player` null/undefined is? Log en return.
+
+PROMPT-SNIPPETS
+- "Genereer een minimal reproducer voor [X] met fake event emitter + usage."
+- "Refactor deze functie in 2 pure helpers; voeg types toe; bewaar gedrag."

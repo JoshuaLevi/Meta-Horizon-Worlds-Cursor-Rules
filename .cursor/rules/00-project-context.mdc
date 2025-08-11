@@ -1,0 +1,19 @@
+---
+description: Always-on project context for Meta Horizon Worlds (Desktop Editor + TypeScript)
+alwaysApply: true
+---
+DOEL
+- Bouw Meta Horizon Worlds experiences met de Desktop Editor + TypeScript.
+- Prioriteit: gameplay-systemen, events, performance.
+
+TECH STACK / CONTEXT
+- TypeScript (strict). Geen `any` tenzij expliciet gedocumenteerd.
+- Horizon Worlds Desktop Editor; TS ↔ CodeBlock interop waar zinnig.
+
+ARCHITECTUURRICHTING
+- Event-driven. Entiteiten praten via events; minimale directe afhankelijkheden.
+- Splits: `Game/*`, `UI/*`, `Physics/*`, `Services/*`.
+
+OUTPUTVERWACHTING
+- Lever complete, compileerbare TS-snippets met korte commentaarregels.
+- Voeg waar relevant een mini-usage toe (3–6 regels).

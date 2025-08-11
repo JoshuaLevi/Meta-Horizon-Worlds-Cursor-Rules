@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+.next
+out
+*.map
+*.mp4
+*.mov
+*.png
+*.jpg
+*.webp
+*.glb
+*.fbx
+*.zip

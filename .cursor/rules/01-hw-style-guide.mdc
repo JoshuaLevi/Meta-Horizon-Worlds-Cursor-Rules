@@ -1,0 +1,18 @@
+---
+description: Style & naming guide for Horizon Worlds TS code
+alwaysApply: true
+---
+STYLE
+- Modules: één public responsibility per file. Exporteer functies/klassen expliciet.
+- Functies: arrow style waar mogelijk; pure functies prefereren.
+- Types: strict, geen `any`, gebruik `readonly` waar kan.
+- Naming: PascalCase voor classes, camelCase voor functies/variabelen.
+- Events: `Domain:Action` (bv. `Game:PlayerJoined`, `UI:ButtonPressed`).
+
+PATTERNS
+- Event bus helper: `emit(name, payload)` en `on(name, handler)`; decouple.
+- Guard clauses bovenaan functies, vroege exit.
+- Timing: minimaliseer per-frame werk; gebruik accumulators/throttling.
+
+COMMENTS
+- Korte rationale bij niet-triviale keuzes. Geen romaneske proza.

@@ -1,0 +1,26 @@
+---
+description: Prefer my local Horizon Worlds example & documentation repos
+alwaysApply: true
+---
+
+# Bronprioriteit
+Bij vragen over Meta Horizon Worlds, TypeScript of de Desktop Editor:
+1. **Gebruik eerst lokale bestanden** uit de volgende mappen:
+   - `horizon-worlds-rules/HorizonWorldsSnippets-main/`
+   - `horizon-worlds-rules/MetaWorldsSkydomeCapture-main/`
+   - `horizon-worlds-rules/worlds-documentation-main/`
+   - `horizon-worlds-rules/worlds-documentation-main-2/`
+2. Pas alleen externe bronnen of webzoekopdrachten toe als de benodigde informatie niet in deze mappen staat.
+3. Vraag mij eerst of ik wil dat je op het web zoekt.
+
+# Citeren
+- Noem bij voorkeur de bestandsnaam en het relatieve pad, bijv.:
+  > Zie `HorizonWorldsSnippets-main/Snippets/PlayerManager.ts`  
+  > Zie `worlds-documentation-main/docs/events.md`
+
+# Versie
+- Ga uit van de meest recente API (2.x) tenzij in deze lokale bronnen een andere versie wordt genoemd.
+
+# Stijl van gebruik
+- Als een bestand zowel uitleg als code bevat, geef altijd eerst de relevante uitleg, daarna een minimalistisch voorbeeld.
+- Houd voorbeelden compact en bruikbaar in de Desktop Editor TypeScript-omgeving.
