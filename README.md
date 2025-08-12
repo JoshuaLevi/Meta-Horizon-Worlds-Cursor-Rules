@@ -63,4 +63,4 @@ README.md                             # Deze handleiding
 💡 Tip: Zet deze setup in een **GitHub template repository**.  
 Zo kun je altijd starten met:
 ```bash
-git clone https://github.com/JoshuaLevi/Meta-Horizon-Worlds-Cursor-Rules.git mijn-nieuwe-project
+git clone https://github.com/JoshuaLevi/Meta-Horizon-Worlds-Cursor-Rules.git my-horizon-world
