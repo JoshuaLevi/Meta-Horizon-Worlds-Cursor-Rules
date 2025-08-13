@@ -1,0 +1,137 @@
+---
+description: Horizon Worlds 2.x API Index (Analytics, Player, Camera, NavMesh, Avatar AI, UI) + Prompt Patterns
+alwaysApply: true
+---
+# Horizon Worlds 2.x API – Local Index & Usage Patterns
+
+Doel: Snelle referentie zonder volledige externe pagina te moeten openen. Samenvattingen, geen 1:1 kopieën. Raadpleeg officiële docs voor volledige definities wanneer iets ontbreekt.
+
+## 🔍 Overzicht per Domein
+| Domein | Kern Types / Entry Points | Primair Gebruik | Veelgemaakte Fouten |
+|--------|---------------------------|-----------------|---------------------|
+| Analytics (Turbo) | `Turbo`, `TurboEvents`, payload *...Payload`, `ITurboSettings`, `Action` enum | In‑world analytics events loggen (progressie, sessie, combat, custom) | Vergeten `Turbo.register(...)` / geen `player` veld in payload / niet uitschakelen ongebruikte categorieën |
+| Player | `Player` class + body parts, movement & animation props | Runtime player state lezen / aanpassen (snelheid, jump, UI focus, aim assist) | `get()` callen buiten lokaal eigendom voor restricted props (bv. `locomotionSpeed`) |
+| Camera | `Camera` + mode setters (`setCameraModeFirstPerson`, `setCameraModeThirdPerson`, `setCameraModeOrbit`, enz.) | Cinematics, UI focus, dynamische FOV / roll | Override niet resetten (`resetCameraFOV`, `resetCameraFarClipPlane`) → persistent afwijkingen |
+| NavMesh | `NavMeshAgent` + profilering (avoidance, path, speed) | NPC / AI pad volgen en botsingsvermijding | Negatieve/onjuiste accel/decel; immobile vergeten uit te zetten; te veel agents → performance |
+| Avatar AI | `AvatarAIAgent` (spawn/despawn), locomotion & interacties | Scripted Avatar NPC's dynamisch spawnen | Niet controleren of spawn gelukt (result type) |
+| UI (Declarative) | `View()`, `Pressable()`, bindings, layout props | In‑world panel UI bouwen (flex containers, interactie) | Geen focus management (Player.focusUI / unfocusUI) / overmatig rebuild per frame |
+
+## 🧩 Analytics (Turbo) Kernpatroon
+1. Script settings: `horizon/analytics` inschakelen.
+2. (Optioneel) `TurboDefaultSettings` vervangen door custom `ITurboSettings` (schakel features uit die je niet logt).
+3. `Turbo.register(this, settings)` in `start()` van je manager component.
+4. Luister naar gameplay events → `Turbo.send(TurboEvents.OnX, payload)`.
+5. Payload altijd: action context velden + `player`.
+
+### Minimal Manager
+```ts
+import * as hz from 'horizon/core';
+import { Turbo, TurboDefaultSettings, TurboEvents } from 'horizon/analytics';
+
+export class AnalyticsMgr extends hz.Component<typeof AnalyticsMgr> {
+  static propsDefinition = {};
+  start() {
+    Turbo.register(this, TurboDefaultSettings);
+    this.connectLocalBroadcastEvent(hz.World.onUpdate, ({deltaTime}) => {
+      // Heartbeat logic (optioneel throttle)
+    });
+  }
+  logAreaEnter(player: hz.Player, area: string) {
+    Turbo.send(TurboEvents.OnAreaEnter, {
+      actionArea: area,
+      actionAreaIsLobbySection: false,
+      actionAreaIsPlayerReadyZone: false,
+      player,
+    });
+  }
+}
+```
+
+### ITurboSettings Tips
+- Schakel categorieën (abilities, damage, quests, etc.) uit om event spam & payload cost te reduceren.
+- Heartbeat interval verhogen (>30s) voor rustige sessies.
+
+## 🕹 Player Essentials
+- Mutables (server of local context): `avatarScale`, `locomotionSpeed`, `jumpSpeed`, `gravity` — beperk wijzigingen en cache defaults.
+- UI Focus (web/mobile): `enterFocusedInteractionMode()` / `exitFocusedInteractionMode()`.
+- Aim assist: Alleen lokaal (non‑VR). Reset via `clearAimAssistTarget()`.
+- Animaties: `playAvatarAnimation(asset, {callback})` + stop via `stopAvatarAnimation()`.
+
+### Snippet – Sprint Boost Zone
+```ts
+this.connectCodeBlockEvent(this.entity, hz.CodeBlockEvents.OnPlayerEnterTrigger, (p: hz.Player) => {
+  const original = p.locomotionSpeed.get();
+  p.locomotionSpeed.set(Math.min(original * 1.5, 10));
+  this.async.setTimeout(()=> p.locomotionSpeed.set(original), 4000);
+});
+```
+
+## 🎥 Camera Patterns
+- Cinematic transition: combine mode setter + FOV override + roll (then reset). 
+- Third person restricties: In VR blijft first person.
+- Force look: `forceLookAt(target, {duration, holdDuration})` → later `stopForceLookAt()`.
+
+### Snippet – Zoom & Focus UI
+```ts
+async function focusPanel(localCam: Camera, panel: Entity) {
+  await localCam.overrideCameraFOV(50, {duration: 0.4});
+  localCam.forceLookAt(panel, {duration: 0.3});
+}
+```
+
+## 🧭 NavMeshAgent Kernpunten
+- Basis tuning: `acceleration`, `deceleration` (negatief), `maxSpeed`, `turnSpeed`.
+- Collision avoidance: combineer `avoidanceLayer` + `avoidanceMask`. Gebruik constants voor leesbaarheid.
+- Performance: Vermijd per‑frame destination changes; throttle.
+- Hoogte: `baseOffset` voor pseudo‑fly / hovering.
+
+### Snippet – Eenvoudige Move Loop
+```ts
+if (agent.destination.get() === null) {
+  agent.destination.set(randomWaypoint());
+} else if (agent.remainingDistance.get() < agent.stoppingDistance.get() + 0.2) {
+  agent.destination.set(randomWaypoint());
+}
+```
+
+## 🤖 AvatarAIAgent
+- Spawn: `await avatarAgent.spawnAgentPlayer()` → check result enum/status.
+- Besturing: Via `locomotion` subobject (pad, stop, rotate opties) en `grabbableInteraction`.
+- Despawn bij cleanup om resource & analytics ruis te beperken.
+
+## 🖼 UI (View / Pressable)
+- Declaratief: bouw boom met `View()` containers + `Pressable()` interacties.
+- State binding: Maak eigen reactive holder of gebruik Horizon bindings (indien beschikbaar) — minimaliseer rebuild frequentie.
+- Interactie pattern: Pressable callback → emit LocalEvent → log analytics → update UI state.
+
+### Snippet – Basic Panel
+```ts
+import { View, Pressable } from 'horizon/ui';
+
+export function MainPanel(onPlay: ()=>void) {
+  return View({ style: { flexDirection: 'column', padding: 8 }, children: [
+    Pressable({ onPress: ()=> onPlay(), children: [View({ style: { width: 120, height: 32 }, children: [] })] })
+  ]});
+}
+```
+
+## ⚠️ Enumerations & Payload Types (Strategie)
+- Niet elk enum lid onthouden → gebruik `switch` met default case voor forward compatibility.
+- Payload naam ↔ event: Vaak `OnX` ↔ `XPayload` / contextafhankelijk. Controleer vereiste velden (bv. altijd `player`).
+
+## 🧪 Prompt Voorbeelden
+- "Genereer NavMeshAgent patrol script dat acceleration/turnSpeed parametrizeert." 
+- "Voeg analytics OnAreaEnter + custom OnRoundStart logging toe met minimal ITurboSettings." 
+- "Maak camera transition: third person → orbit → focus UI, reset na 5s." 
+- "UI panel met Pressable die avatarScale toggle en analytics event stuurt." 
+
+## ✅ Checklist bij Gebruik
+[] Analytics manager geregistreerd & categorieën gesnoeid?
+[] Player property mutaties beperkt en teruggezet?
+[] Camera overrides netjes gereset?
+[] NavMeshAgents niet overspamt met destinations?
+[] UI updates gebatcht / geen per-frame rebuild?
+[] Enums afgevangen met default pad?
+
+---
+Bronnen: Officiële Horizon Worlds 2.0.0 API pagina's (Analytics, Player, Camera, NavMesh, AvatarAIAgent, UI). Samengevat voor lokaal gebruik.

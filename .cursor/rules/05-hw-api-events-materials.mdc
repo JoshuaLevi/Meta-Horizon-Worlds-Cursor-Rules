@@ -1,0 +1,116 @@
+---
+description: Integrated Horizon Worlds 2.0 API (Entity), Events Best Practices & Materials naming quick reference + local util mappings
+alwaysApply: true
+---
+# Horizon Worlds 2.x Quick Reference (Entity · Events · Materials · Local Utils)
+
+Deze samenvatting komt uit de officiële 2.0.0 referentie & best‑practice pagina's plus de Vidyuu utility scripts in `horizon-worlds-rules/00 TS Utils/`. Gebruik dit als eerste laag voordat je opnieuw externe pagina's raadpleegt.
+
+## 1. Entity Essentials (API 2.0)
+Kernpunten uit `core_entity`:
+- Alles in de wereld is een `Entity`; functionaliteit komt via Components & Gizmos.
+- Positionering & transformatie via `position`, `rotation` (`Quaternion`), `scale` (`Vec3`). Gebruik `.set()` in plaats van reassignment.
+- Relatieve beweging helpers: `moveRelativeTo()`, `moveRelativeToPlayer()`, `rotateRelativeTo()`, `rotateRelativeToPlayer()`. Gebruik in een update loop (anders geen vloeiende beweging / ownership issues).
+- Eigendom (`owner`) wissel: draag relevante state handmatig over (zie Component.transferOwnership / receiveOwnership) anders verlies je runtime state.
+- Zichtbaarheid: `visible` + per‑player filtering via `setVisibilityForPlayers()` / `resetVisibilityForPlayers()`. Een onzichtbare parent forceert onzichtbare children.
+- Tags: max 5, 20 chars, session‑only als via TS gezet; gebruik voor tijdelijke matching (niet voor persistente opslag).
+- `getComponents(SomeComponent)` alleen veilig na `start()` (niet in `preStart()`), omdat nog niet alles geïnstantieerd hoeft te zijn.
+
+### Minimal Patterns
+```ts
+// Safe component access after start
+const movers = this.entity.getComponents(MovePlatform);
+
+// Tagging (ephemeral)
+entity.tags.set(["QuestTarget"]);
+if (entity.tags.contains("QuestTarget")) { /* ... */ }
+```
+
+## 2. Events Best Practices
+Bron: "Events Best Practices" document.
+
+Principes:
+1. Unsubscribe: Bewaar de `EventSubscription` en `.disconnect()` wanneer niet meer nodig (voorkomt spurious calls / leaks).
+2. Init-time race: Gebruik `this.async.setTimeout(()=> emit...)` voor events die direct bij world start moeten vuren zodat alle listeners geregistreerd zijn.
+3. Centraliseer events: Eén `EventContainer` module bundelt Local / Broadcast / CodeBlock events → uniforme import & hergebruik.
+4. CodeBlock interoperabiliteit: Gebruik CodeBlock events als brug tijdens gefaseerde migratie naar TS.
+
+### Patterns
+```ts
+// Unsubscribe pattern
+let sub = this.connectBroadcastEvent(World.onUpdate, ({deltaTime}) => tick(deltaTime));
+// Later
+sub?.disconnect(); sub = null;
+
+// Delayed fire at init
+this.async.setTimeout(() => EventContainer.gameReady.send({ started: true }), 0);
+
+// Central container (excerpt)
+import { LocalEvent, CodeBlockEvent, PropTypes } from 'horizon/core';
+export const EventContainer = {
+  playerJoined: new LocalEvent<{ player: Player }>('playerJoined'),
+  announce: new CodeBlockEvent<[caller: Entity, text: string, dur: number]>(
+    'announce', [PropTypes.Entity, PropTypes.String, PropTypes.Number]
+  ),
+};
+```
+
+## 3. Materials & Texture Naming (Custom Model Import)
+Suffix conventies in FBX materiaalnaam bepalen interpretatie; texture bestandsnamen coderen kanalen:
+
+| Type | Materiaalnaam eindigt op | Textures / Kanaal code | Betekenis (samengevat) |
+|------|--------------------------|------------------------|------------------------|
+| Single PBR | (geen extra) | `MyMat_BR.png` | BaseColor (sRGB) + Roughness (lin) |
+| Single Metal PBR | `_Metal` | `MyMat_BR.png` | BaseColor + Roughness + Metalness=1 |
+| Double PBR | (geen extra) | `MyMat_BR.png`, `MyMat_MEO.png` | BaseColor+Roughness / Metal+Emissive+AO |
+| Unlit | `_Unlit` | `MyMat_B.png` | BaseColor only, unlit |
+| Unlit Blend | `_Blend` | `MyMat_BA.png` | BaseColor + Alpha (opacity) |
+| Transparent | `_Transparent` | `MyMat_BR.png`, `MyMat_MESA.png` | Base+Rough / Metal+Emissive+Specular+Alpha |
+| Masked | `_Masked` | `MyMat_BA.png` | Base + Alpha cutout at 0.5 |
+| Vertex Color PBR | `_VXC` | (none) | Vertex RGBA only |
+| Vertex Color Single PBR | `_VXM` | `MyMat_BR.png` | Vertex * BaseColor+Roughness |
+| Vertex Color Double PBR | `_VXM` | + `MyMat_MEO.png` | Vertex * BaseColor, plus Metal+Emissive+AO |
+| UI Optimized | `_UIO` | `MyMat_BA.png` | Unlit UI, Base + Alpha |
+
+Filename richtlijnen:
+- Vermijd speciale tekens (`- . , / * $ &`) en overmatig underscores; alleen `_Metal` etc. als tag.
+- Consistente CamelCase (bv. `NameLikeThis_BR.png`).
+
+## 4. Lokale Utility Scripts (Vidyuu) – Gebruik & Mapping
+Pad: `horizon-worlds-rules/00 TS Utils/`
+
+| File | Functiegebied | Kern API / Gebruik | Voorbeeld |
+|------|---------------|--------------------|-----------|
+| `UtilMotionOverTime_Func.ts` + `UtilMotionOverTime_Entity.ts` | Easing over tijd (position / scale / rotation) | `overTime.moveTo.start(entity, targetPos, 750)` → update loop in entity script verwerkt lerp/slerp | `overTime.rotateTo.start(door, targetQuat, 500)` |
+| `UtilAction_Func.ts` | Audio / Particles / Haptics helpers | `actionUtils.playSFX(audioEnt, pos)` / `playHaptics(player,[200,HapticStrength.Medium,HapticSharpness.Soft])` | `actionUtils.playVFXForDuration(fireFX, pos, 2)` |
+| `UtilColor_Func.ts` | Kleuroperaties & tint | `colorUtils.lerpColor(a,b,t)` / `tintMesh(color, mesh, 0.8)` | `mesh.style.tintColor.set(colorUtils.lerpColor(c1,c2,0.5))` |
+| `UtilArray_Func.ts` | Array utilities | `arrayUtils.shuffleArray(list)` / `getRandomItemFromArray([...])` | `arrayUtils.removeItemFromArray(players, p)` |
+| `UtilOperator_Func.ts` | Datum / nummer / random | `operatorUtils.getDaySinceEpoch()` / `getRandomNumberFromRange(1,10,true)` | `operatorUtils.toLocaleString(',', 12000)` |
+| `Util_PopUp_Func_Entity.ts` | UI Popups (VR vs XS) | `popUp_Func.popUp([player], 'Hello', true, 3, 'Roboto-Bold SDF', { fontColor: Color.red })` | `popUp_Func.playPopUpAfterDelay(1000, [p], 'Ready', false, 2)` |
+| `UtilComponent_Entity.ts` + `UtilComponent_Data.ts` | Shared component access (async timers) | Stelt `componentUtil_Data.component` in zodat helpers timers kunnen plannen | N.v.t. |
+
+### Over Time Usage Pattern
+```ts
+// Attach OverTime component ONCE in de wereld
++overTime.moveTo.start(platform, new Vec3(0,5,0), 1000);
++overTime.scaleTo.start(platform, new Vec3(2,2,2), 500);
+```
+
+## 5. Aanbevolen Prompt Snippets
+- "Genereer een EventContainer module met Local+Broadcast events voor [feature] en toon unsubscribe pattern." 
+- "Gebruik overTime utils om een object in 2s te roteren en daarna een popup te tonen." 
+- "Check materiaalnaam + texture kanaal mapping voor [_Transparent] case." 
+
+## 6. Policy
+- Eerst deze samenvatting & lokale utils; daarna pas live docs raadplegen wanneer info ontbreekt.
+- Gebruik consistent event naam schema (`Domain:Action`) uit `01-hw-style-guide.mdc` bij nieuwe entries in EventContainer.
+
+## 7. Korte Checklist (Entities & Events)
+[] Ownership correct bij state mutatie?
+[] Unsubscribe paden aanwezig?
+[] Geen onnodige per-frame allocaties (hergebruik Vec3/Quaternion waar kan)?
+[] Material suffix klopt vs gewenste shading?
+[] Utility script hergebruikt i.p.v. duplicatie?
+
+---
+Bronnen: Horizon Worlds API Reference 2.0.0 (Entity), Events Best Practices, Materials Guidance; Vidyuu util scripts (lokale map). Samengevat voor snelle on‑device AI referentie.

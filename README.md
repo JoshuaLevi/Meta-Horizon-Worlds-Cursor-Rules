@@ -15,12 +15,16 @@ Het bevat:
 02-docs-precedence.mdc              # Altijd lokale HW-docs/snippets prefereren
 03-ts-globs.mdc                     # Regels voor TS-bestanden
 04-testing-playbook.mdc             # Test- en reviewchecklist
+05-hw-api-events-materials.mdc      # Samenvatting Entity API / Events / Materials / Utils
+06-hw-api-index.mdc                 # Domein index (Analytics/Player/Camera/NavMesh/AvatarAI/UI)
+07-hw-api-url-index.mdc            # Volledige 2.0.0 API URL index (categorised)
 
 /horizon-worlds-rules/                # Lokale Horizon Worlds kennisbronnen
 HorizonWorldsSnippets-main/         # Snippets en patterns
 MetaWorldsSkydomeCapture-main/      # Sky dome capture scripts
 worlds-documentation-main/          # Documentatie (HTML/JS/CSS)
 worlds-documentation-main-2/        # Extra documentatie
+00 TS Utils/                        # Vidyuu utility scripts (motion, colors, arrays, popups, actions)
 
 .cursorigonre                         # Bestanden uitsluiten van indexering
 README.md                             # Deze handleiding
