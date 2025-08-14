@@ -1,0 +1,26 @@
+---
+description: Prompt patterns for Horizon Worlds generation (components, managers, UI)
+alwaysApply: true
+---
+# Prompt Patterns
+
+Gebruik deze formuleringen om de AI te sturen naar consistente, onderhoudbare code:
+
+## Component / Manager
+- "Maak een Component `XManager` met start/stop hooks, gebruik EventContainer voor subscriptions, en voeg TODO logs toe."
+- "Voeg analytics logging toe met AnalyticsManager: registreer in start(), log OnAreaEnter bij trigger entry."
+
+## UI
+- "Bouw een declaratief UI panel met View/Pressable; style minimaal, splits construction en handlers."
+- "Implementeer focus flow met withFocusedInteraction(player, fn), en reset camera na gebruik."
+
+## NavMesh / AI
+- "Genereer NavMesh patrol met acceleration/turnSpeed parameters en throttling; lever init + disposer terug."
+
+## Mobile
+- "Voeg mobile gestures toe via attachMobileGestures(target, { onTap, onPinch, onPan }) en koppel acties."
+
+Tips:
+- Verwijs naar scaffolds: `horizon-worlds-rules/scaffolds/`.
+- Noteer waar je de stubs volgt: "based on local stub".
+- Voeg een korte README sectie of comment met usage toe.

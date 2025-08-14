@@ -11,177 +11,184 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 - Daarna (indien nodig) verwijs naar specifieke URL uit deze index: *"Geef compacte samenvatting van [core_player] d.m.v. lokale index; geen volledige copy."*
 - Voeg bij nieuwe API's dezelfde categorievorm toe.
 
+### Snelle hints (per domein)
+- Analytics: registreer Turbo één keer, payloads bevatten altijd `player` + context.
+- Player: wijzig locomotion/scale spaarzaam en reset na gebruik; UI focus togglen via focused interaction.
+- Camera: combineer mode + FOV + lookAt; vergeet reset niet.
+- NavMesh: throttle destination updates; tune accel/decel/turnSpeed.
+- UI: gebruik View/Pressable; minimaliseer rebuilds.
+
 ## Analytics
-`analytics_turbodebug`
-`analytics_action`
-`analytics_analyticssectiongamemode`
-`analytics_gamestateenum`
-`analytics_participationenum`
-`analytics_iturbosettings`
-`analytics_abilitydequippayload`
-`analytics_abilityequippayload`
-`analytics_abilityusedpayload`
-`analytics_areaenterpayload`
-`analytics_areaexitpayload`
-`analytics_armordequippayload`
-`analytics_armorequippayload`
-`analytics_customactiondata`
-`analytics_customeventpayload`
-`analytics_damageenemypayload`
-`analytics_damageplayerpayload`
-`analytics_deathbyenemypayload`
-`analytics_deathbyplayerpayload`
-`analytics_deathpayload`
-`analytics_discoverymadepayload`
-`analytics_eventdata`
-`analytics_eventvaluetype`
-`analytics_frictioncausedpayload`
-`analytics_frictionhitpayload`
-`analytics_gameroundendforplayerspayload`
-`analytics_gameroundstartforplayerspayload`
-`analytics_koenemypayload`
-`analytics_koplayerpayload`
-`analytics_leveluppayload`
-`analytics_playerreadyenterpayload`
-`analytics_playerreadyexitpayload`
-`analytics_questcompletedpayload`
-`analytics_rewardsearnedpayload`
-`analytics_roundendpayload`
-`analytics_roundstartpayload`
-`analytics_sectionendpayload`
-`analytics_sectionstartpayload`
-`analytics_stageendpayload`
-`analytics_stagestartpayload`
-`analytics_taskendpayload`
-`analytics_taskstartpayload`
-`analytics_taskstependpayload`
-`analytics_taskstepstartpayload`
-`analytics_weaponequippayload`
-`analytics_weapongrabpayload`
-`analytics_weaponreleasepayload`
-`analytics_wearableequippayload`
-`analytics_wearablereleasepayload`
-`analytics_turbo`
-`analytics_turbodataservice`
-`analytics_turbodefaultsettings`
-`analytics_turboevents`
-`analytics_analytics`
+`analytics_turbodebug` – hulpmiddel om Turbo events te inspecteren
+`analytics_action` – standaard actie-typen voor analytics
+`analytics_analyticssectiongamemode` – sectie/gamemode taxonomy
+`analytics_gamestateenum` – spelstatus enum (bv. start/stop)
+`analytics_participationenum` – participatietype (solo/co-op)
+`analytics_iturbosettings` – schakelbare categorieën en intervals
+`analytics_abilitydequippayload` – payload voor ability uitrusting verwijderen
+`analytics_abilityequippayload` – payload voor ability uitrusten
+`analytics_abilityusedpayload` – payload voor ability gebruik
+`analytics_areaenterpayload` – player betreedt gebied
+`analytics_areaexitpayload` – player verlaat gebied
+`analytics_armordequippayload` – armor afleggen
+`analytics_armorequippayload` – armor aantrekken
+`analytics_customactiondata` – custom key/value data
+`analytics_customeventpayload` – payload voor eigen event
+`analytics_damageenemypayload` – enemy schade log
+`analytics_damageplayerpayload` – player schade log
+`analytics_deathbyenemypayload` – dood door enemy
+`analytics_deathbyplayerpayload` – dood door player
+`analytics_deathpayload` – generieke dood payload
+`analytics_discoverymadepayload` – ontdekking gedaan
+`analytics_eventdata` – basis event data shape
+`analytics_eventvaluetype` – waarde-typen voor events
+`analytics_frictioncausedpayload` – wrijving veroorzaakt
+`analytics_frictionhitpayload` – wrijving geraakt
+`analytics_gameroundendforplayerspayload` – ronde einde (per spelers)
+`analytics_gameroundstartforplayerspayload` – ronde start (per spelers)
+`analytics_koenemypayload` – enemy KO
+`analytics_koplayerpayload` – player KO
+`analytics_leveluppayload` – level up
+`analytics_playerreadyenterpayload` – ready-zone in
+`analytics_playerreadyexitpayload` – ready-zone uit
+`analytics_questcompletedpayload` – quest voltooid
+`analytics_rewardsearnedpayload` – beloningen verdiend
+`analytics_roundendpayload` – ronde einde
+`analytics_roundstartpayload` – ronde start
+`analytics_sectionendpayload` – sectie einde
+`analytics_sectionstartpayload` – sectie start
+`analytics_stageendpayload` – stage einde
+`analytics_stagestartpayload` – stage start
+`analytics_taskendpayload` – taak einde
+`analytics_taskstartpayload` – taak start
+`analytics_taskstependpayload` – taakstap einde
+`analytics_taskstepstartpayload` – taakstap start
+`analytics_weaponequippayload` – wapen uitrusten
+`analytics_weapongrabpayload` – wapen oppakken
+`analytics_weaponreleasepayload` – wapen loslaten
+`analytics_wearableequippayload` – wearable uitrusten
+`analytics_wearablereleasepayload` – wearable loslaten
+`analytics_turbo` – hoofd API voor registreren/ versturen
+`analytics_turbodataservice` – data service integraties
+`analytics_turbodefaultsettings` – standaard instellingen
+`analytics_turboevents` – eventnamen index
+`analytics_analytics` – algemene analytics entry
 
 ## Avatar AI
-`avatar_ai_agent_agentgrabbableinteraction`
-`avatar_ai_agent_agentlocomotion`
-`avatar_ai_agent_avataraiagent`
-`avatar_ai_agent_agentgrabactionresult`
-`avatar_ai_agent_agentlocomotionresult`
-`avatar_ai_agent_agentspawnresult`
-`avatar_ai_agent_agentlocomotionoptions`
-`avatar_ai_agent_agentrotationoptions`
-`avatar_ai_agent_apiname`
+`avatar_ai_agent_agentgrabbableinteraction` – grijpen/interactie API
+`avatar_ai_agent_agentlocomotion` – lopen/navigeren controls
+`avatar_ai_agent_avataraiagent` – hoofdklasse voor AI agent
+`avatar_ai_agent_agentgrabactionresult` – resultaat van grab actie
+`avatar_ai_agent_agentlocomotionresult` – resultaat locomotion
+`avatar_ai_agent_agentspawnresult` – spawn resultaat
+`avatar_ai_agent_agentlocomotionoptions` – optionele locomotion params
+`avatar_ai_agent_agentrotationoptions` – rotatie opties
+`avatar_ai_agent_apiname` – indexpagina
 
 ## Camera
 `camera_attachcameramode`
-`camera_camera`
+`camera_camera` – hoofd camera API (local)
 `camera_firstpersoncameramode`
 `camera_fixedcameramode`
 `camera_followcameramode`
 `camera_orbitcameramode`
 `camera_pancameramode`
 `camera_thirdpersoncameramode`
-`camera_cameramode`
-`camera_cameratransitionendreason`
-`camera_easing`
+`camera_cameramode` – mode interface/overzicht
+`camera_cameratransitionendreason` – redenen voor transition stop
+`camera_easing` – easing curves
 `camera_icameramode`
-`camera_attachcameraoptions`
-`camera_cameratarget`
-`camera_cameratransitionoptions`
-`camera_fixedcameraoptions`
-`camera_followcameraoptions`
-`camera_forcelookatoptions`
-`camera_orbitcameraoptions`
-`camera_pancameraoptions`
-`camera_stoplookatoptions`
-`camera_apiname`
-`camera_localcamera`
+`camera_attachcameraoptions` – opties voor attach mode
+`camera_cameratarget` – target type
+`camera_cameratransitionoptions` – transition parameters
+`camera_fixedcameraoptions` – fixed mode opties
+`camera_followcameraoptions` – follow mode opties
+`camera_forcelookatoptions` – lookAt parameters
+`camera_orbitcameraoptions` – orbit mode opties
+`camera_pancameraoptions` – pan mode opties
+`camera_stoplookatoptions` – stop lookAt parameters
+`camera_apiname` – indexpagina
+`camera_localcamera` – lokale camera entry
 
 ## Core Classes & Components
 `core_basetestcomponent`
-`core_component`
+`core_component` – basis voor scripts/components
 `core_aiagentgizmo`
 `core_achievementsgizmo`
 `core_animatedentity`
 `core_asset`
 `core_assetcontentdata`
-`core_assetpoolgizmo`
+`core_assetpoolgizmo` – asset pool beheer
 `core_attachableentity`
-`core_audiogizmo`
+`core_audiogizmo` – audio afspelen/opties
 `core_avatarposegizmo`
-`core_bounds`
+`core_bounds` – AABB/omvang helpers
 `core_codeblockevent`
-`core_color`
+`core_color` – kleur utilities
 `core_dynamiclightgizmo`
-`core_entity`
+`core_entity` – basisobject in de wereld
 `core_focusedinteraction`
-`core_grabbableentity`
+`core_grabbableentity` – pakbare entiteit
 `core_horizonproperty`
 `core_horizonreferenceproperty`
 `core_iwpsellergizmo`
-`core_inworldpurchase`
+`core_inworldpurchase` – aankopen in-world
 `core_localevent`
 `core_materialasset`
-`core_meshentity`
+`core_meshentity` – mesh entiteit
 `core_networkevent`
-`core_physicalentity`
-`core_player`
+`core_physicalentity` – physics eigenschappen
+`core_player` – spelerobject (avatar, beweging, UI)
 `core_playerbodypart`
 `core_playercontrols`
 `core_playerhand`
 `core_playerinput`
 `core_projectilelaunchergizmo`
-`core_quaternion`
+`core_quaternion` – rotatie representatie
 `core_raycastgizmo`
-`core_rect`
+`core_rect` – rechthoek type
 `core_spawncontroller`
 `core_spawncontrollerbase`
 `core_spawnpointgizmo`
 `core_textgizmo`
 `core_textureasset`
-`core_trailgizmo`
+`core_trailgizmo` – trail VFX
 `core_transform`
 `core_triggergizmo`
-`core_vec3`
+`core_vec3` – 3D vector type
 `core_world`
 `core_worldinventory`
 
 ## Core Enums / Helpers
-`core_animationcallbackreasons`
+`core_animationcallbackreasons` – redenen voor animatie callbacks
 `core_attachableplayeranchor`
-`core_audibilitymode`
+`core_audibilitymode` – hoorbaarheid audio
 `core_avataranimationmask`
 `core_avatargrippose`
 `core_avatargripposeanimationnames`
 `core_avatarposeusemode`
 `core_buttonicon`
 `core_buttonplacement`
-`core_entityinteractionmode`
-`core_entitynamematchoperation`
-`core_entitytagmatchoperation`
+`core_entityinteractionmode` – interactiemodi
+`core_entitynamematchoperation` – naam match
+`core_entitytagmatchoperation` – tag match
 `core_eulerorder`
 `core_eventtargettype`
-`core_handedness`
+`core_handedness` – links/rechts hand
 `core_hapticsharpness`
 `core_hapticstrength`
 `core_layertype`
 `core_monetizationtimeoption`
-`core_physicsforcemode`
+`core_physicsforcemode` – force modes
 `core_playerbodyparttype`
-`core_playerdevicetype`
+`core_playerdevicetype` – device/platfom
 `core_playerinputaction`
-`core_playervisibilitymode`
+`core_playervisibilitymode` – zichtbaarheid
 `core_raycasttargettype`
 `core_space`
 `core_spawnerror`
 `core_spawnstate`
-`core_tooltipanchorlocation`
+`core_tooltipanchorlocation` – tooltip anker
 `core_assert`
 `core_clamp`
 `core_degreestoradians`
@@ -192,15 +199,15 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `core_disposableobject`
 `core_disposeoperationregistration`
 `core_entitystyle`
-`core_eventsubscription`
+`core_eventsubscription` – unsubscribe handle
 `core_ileaderboards`
 `core_ipersistentstorage`
 `core_ipersistentstorageworld`
 `core_iteam`
 `core_iui`
 `core_playerentitlement`
-`core_readablehorizonproperty`
-`core_writablehorizonproperty`
+`core_readablehorizonproperty` – get-only prop
+`core_writablehorizonproperty` – set/get prop
 `core_aimassistoptions`
 `core_animationcallback`
 `core_animationcallbackreason`
@@ -211,14 +218,14 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `core_componentwithconstructor`
 `core_disposeoperation`
 `core_entityraycasthit`
-`core_fetchasdataoptions`
-`core_findentitiesoptions`
+`core_fetchasdataoptions` – data fetch opties
+`core_findentitiesoptions` – zoekopties
 `core_focusuioptions`
 `core_focusedinteractionoptions`
 `core_focusedinteractiontapoptions`
 `core_focusedinteractiontrailoptions`
-`core_inworldpurchasable`
-`core_inworldpurchasableprice`
+`core_inworldpurchasable` – item dat je kunt kopen
+`core_inworldpurchasableprice` – prijsstructuur
 `core_infoslide`
 `core_infoslidestyle`
 `core_interactioninfo`
@@ -233,28 +240,28 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `core_playercontrolsconnectoptions`
 `core_playerinputstatechangecallback`
 `core_playerraycasthit`
-`core_popupoptions`
+`core_popupoptions` – popup configuratie
 `core_propsdefinitionfromcomponent`
 `core_propsfromdefinitions`
 `core_raycasthit`
 `core_raycastoptions`
 `core_serializablestate`
-`core_setmaterialoptions`
-`core_setmeshoptions`
-`core_settextureoptions`
+`core_setmaterialoptions` – materiaalset opties
+`core_setmeshoptions` – mesh wissel opties
+`core_settextureoptions` – texture set opties
 `core_springoptions`
 `core_staticraycasthit`
 `core_stopanimationoptions`
 `core_throwoptions`
 `core_tooltiplineattachmentproperties`
-`core_tooltipoptions`
+`core_tooltipoptions` – tooltip styling/gedrag
 `core_vfxparameter`
 `core_vfxparametertype`
 `core_voipsetting`
 `core_apiversion`
 `core_codeblockevents`
-`core_defaultfetchasdataoptions`
-`core_defaultfindentitiesoptions`
+`core_defaultfetchasdataoptions` – standaard data fetch
+`core_defaultfindentitiesoptions` – standaard zoekopties
 `core_defaultfocusedinteractionenableoptions`
 `core_defaultfocusedinteractiontapoptions`
 `core_defaultfocusedinteractiontrailoptions`
@@ -267,9 +274,9 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `core_voipsettingvalues`
 
 ## Mobile Gestures
-`mobile_gestures_gestureevent`
-`mobile_gestures_gestures`
-`mobile_gestures_gesturesoptions`
+`mobile_gestures_gestureevent` – generiek gesture event
+`mobile_gestures_gestures` – entry voor gestures
+`mobile_gestures_gesturesoptions` – config opties
 `mobile_gestures_swipedirection`
 `mobile_gestures_longtapeventdata`
 `mobile_gestures_paneventdata`
@@ -283,9 +290,9 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `mobile_gestures_apiname`
 
 ## NavMesh
-`navmesh_navmesh`
-`navmesh_navmeshagent`
-`navmesh_navmeshmanager`
+`navmesh_navmesh` – globale navmesh API
+`navmesh_navmeshagent` – agent configuratie en beweging
+`navmesh_navmeshmanager` – beheer en profiles
 `navmesh_navmeshagentalignment`
 `navmesh_navmeshstate`
 `navmesh_inavmes`
@@ -300,33 +307,33 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 `navmesh_apiname`
 
 ## NPC
-`npc_npc`
-`npc_npcconversation`
-`npc_npcengagementphase`
-`npc_npcerrorcategory`
-`npc_viseme`
-`npc_npcattentiontarget`
-`npc_npcaudiosettings`
-`npc_apiname`
-`npc_npcevents`
+`npc_npc` – hoofd NPC API
+`npc_npcconversation` – gesprek/interactie flow
+`npc_npcengagementphase` – fasen van engagement
+`npc_npcerrorcategory` – foutcategorieën
+`npc_viseme` – mondvormen (spraak)
+`npc_npcattentiontarget` – aandacht doelen
+`npc_npcaudiosettings` – audio instellingen
+`npc_apiname` – indexpagina
+`npc_npcevents` – NPC events
 
 ## Performance
-`performance_countsampler`
-`performance_custommetricsbuffer`
-`performance_custommetricscoordinator`
-`performance_durationsampler`
+`performance_countsampler` – tel-metric sampler
+`performance_custommetricsbuffer` – buffer voor custom metrics
+`performance_custommetricscoordinator` – coördinator
+`performance_durationsampler` – duurmetingen
 `performance_horizoncountsampler`
 `performance_horizondurationsampler`
 `performance_horizonmarkersampler`
-`performance_horizonperformancemetricconfig`
+`performance_horizonperformancemetricconfig` – config
 `performance_horizontraceevent`
-`performance_markersampler`
+`performance_markersampler` – markers
 `performance_horizonmetricsuffixes`
 `performance_horizontraceeventtype`
-`performance_apiname`
+`performance_apiname` – indexpagina
 
 ## Social
-`social_social`
+`social_social` – social API entry (images, follow, etc.)
 `social_avatarimagetype`
 `social_followstatus`
 `social_iavatarimageoptions`
@@ -334,57 +341,57 @@ Doel: Alle relevante (door jou aangeleverde) API referentie links lokaal zichtba
 
 ## UI
 `ui_animation_2`
-`ui_uicomponent`
-`ui_valuebindingbase`
-`ui_animatedbinding`
-`ui_animatedinterpolation`
-`ui_binding`
-`ui_easing`
-`ui_imagesource`
-`ui_uigizmo`
-`ui_uinode`
+`ui_uicomponent` – basis UI component
+`ui_valuebindingbase` – basis voor bindings
+`ui_animatedbinding` – geanimeerde binding
+`ui_animatedinterpolation` – animatie interpolatie
+`ui_binding` – eenvoudige binding
+`ui_easing` – easing curves voor animaties
+`ui_imagesource` – bron voor images
+`ui_uigizmo` – UI gizmo component
+`ui_uinode` – UI knooppunt (boom)
 `ui_avatarimageexpressions`
-`ui_dynamiclist`
-`ui_image_2`
-`ui_pressable`
-`ui_scrollview`
-`ui_text_2`
-`ui_view`
+`ui_dynamiclist` – dynamische lijst
+`ui_image_2` – image element
+`ui_pressable` – klik/tap interactie
+`ui_scrollview` – scroll container
+`ui_text_2` – tekst element
+`ui_view` – container/layout
 `ui_bindable`
-`ui_bindingset`
-`ui_borderstyle`
-`ui_callback`
-`ui_callbackmap`
-`ui_callbackwithpayload`
-`ui_colorvalue`
-`ui_conditionalprops`
-`ui_dimensionvalue`
-`ui_dynamiclistprops`
-`ui_fontfamily`
-`ui_imageprops`
-`ui_imagestyle`
-`ui_layoutstyle`
-`ui_pressableprops`
-`ui_scrollviewprops`
-`ui_shadowstyle`
-`ui_textprops`
-`ui_textstyle`
-`ui_timinganimationconfig`
-`ui_transformstyle`
-`ui_uichildren`
-`ui_viewprops`
-`ui_viewstyle`
+`ui_bindingset` – set met bindings
+`ui_borderstyle` – randstijlen
+`ui_callback` – callback type
+`ui_callbackmap` – map van callbacks
+`ui_callbackwithpayload` – callback met data
+`ui_colorvalue` – kleurwaarde type
+`ui_conditionalprops` – props conditioneel
+`ui_dimensionvalue` – dimensiewaarde
+`ui_dynamiclistprops` – props voor dynamic list
+`ui_fontfamily` – fonts
+`ui_imageprops` – image props
+`ui_imagestyle` – image stijl
+`ui_layoutstyle` – layout stijl
+`ui_pressableprops` – pressable props
+`ui_scrollviewprops` – scrollview props
+`ui_shadowstyle` – schaduw stijl
+`ui_textprops` – text props
+`ui_textstyle` – text stijl
+`ui_timinganimationconfig` – timing config
+`ui_transformstyle` – transform stijl
+`ui_uichildren` – children type
+`ui_viewprops` – view props
+`ui_viewstyle` – view stijl
 
 ## Unity Asset Bundles
-`unity_asset_bundles_assetbundlegizmo`
-`unity_asset_bundles_assetbundleinstancereference`
-`unity_asset_bundles_ientitystyle`
-`unity_asset_bundles_setmaterialoptions`
-`unity_asset_bundles_unityanimationevent`
+`unity_asset_bundles_assetbundlegizmo` – instantiatie/controle
+`unity_asset_bundles_assetbundleinstancereference` – instance ref
+`unity_asset_bundles_ientitystyle` – style interface
+`unity_asset_bundles_setmaterialoptions` – materiaal opties
+`unity_asset_bundles_unityanimationevent` – animatie event
 
 ## World Streaming
-`world_streaming_sublevelentity`
-`world_streaming_sublevelstates`
+`world_streaming_sublevelentity` – sublevel entiteit
+`world_streaming_sublevelstates` – laadstatussen
 
 ---
 Formaat: elk item verwijst naar `https://developers.meta.com/horizon-worlds/reference/2.0.0/<item>`.

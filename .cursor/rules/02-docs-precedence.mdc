@@ -11,6 +11,8 @@ Bij vragen over Meta Horizon Worlds, TypeScript of de Desktop Editor:
    - `horizon-worlds-rules/worlds-documentation-main/`
    - `horizon-worlds-rules/worlds-documentation-main-2/`
   - `horizon-worlds-rules/00 TS Utils/`  *(Vidyuu utility scripts: motion over time, colors, arrays, popups, actions)*
+  - `horizon-worlds-rules/stubs/`  *(lichte TypeScript API stubs – alleen als gids, niet bindend)*
+  - `horizon-worlds-rules/scaffolds/`  *(kant‑en‑klare managers/patterns voor genereren)*
 2. Pas alleen externe bronnen of webzoekopdrachten toe als de benodigde informatie niet in deze mappen staat.
 3. Vraag mij eerst of ik wil dat je op het web zoekt.
 

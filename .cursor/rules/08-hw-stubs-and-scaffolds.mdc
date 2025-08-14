@@ -1,0 +1,22 @@
+---
+description: Local type stubs + scaffolds to boost offline AI generation
+alwaysApply: true
+---
+# Stubs & Scaffolds – Hoe te gebruiken
+
+Doel: AI betere autocomplete/structuur geven zonder externe docs. Dit zijn minimale, niet-bindende definities en helpers. Bij twijfel: controleer officiële docs of bestaande snippets in `HorizonWorldsSnippets-main`.
+
+## Mappen
+- `horizon-worlds-rules/stubs/` – lichte `.d.ts` type stubs voor kern-API's (core, camera, analytics, navmesh, ui)
+- `horizon-worlds-rules/scaffolds/` – kleine, herbruikbare helpers (AnalyticsManager, EventContainer, CameraHelpers)
+
+## Richtlijnen
+- Gebruik stubs alleen als referentie; methoden/velden kunnen afwijken. Plaats commentaar: "based on local stub".
+- Gebruik scaffolds als startpunt en vervang `any`/global lookups met echte imports wanneer beschikbaar in jouw project.
+- Respecteer `02-docs-precedence.mdc`: lokale bronnen eerst; web alleen als expliciet gevraagd.
+
+## Quick Prompts
+- "Gebruik EventContainer om alle subscriptions te beheren in dit component."
+- "Voeg AnalyticsManager toe en log OnAreaEnter bij trigger entry."
+- "Gebruik CameraHelpers.focusPanel voor UI focus en reset nadien."
+
