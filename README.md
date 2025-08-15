@@ -1,78 +1,72 @@
-# Horizon Worlds – Cursor AI Setup
+Horizon Worlds – Cursor AI Setup
 
-Deze map is een kant-en-klare ontwikkelomgeving voor Meta Horizon Worlds (Desktop Editor + TypeScript) projecten in **Cursor**.  
-Het bevat:
-- **Projectregels** in `.cursor/rules/` die Cursor sturen om altijd jouw lokale documentatie en voorbeelden te gebruiken.
-- **Lokale kennisbronnen** (`horizon-worlds-rules/`) met externe repos vol voorbeeldcode en documentatie.
-- Een `.cursorignore` om ruis en zware bestanden te vermijden.
+This folder is a ready-to-use development environment for Meta Horizon Worlds (Desktop Editor + TypeScript) projects in Cursor.
+It includes:
+	•	Project rules in .cursor/rules/ that guide Cursor to always use your local documentation and examples first.
+	•	Local knowledge sources (horizon-worlds-rules/) containing external repos full of sample code and documentation.
+	•	A .cursorignore file to avoid noise and heavy files.
 
----
+⸻
 
-## 📂 Mappenstructuur
-/.cursor/rules/                      # Cursor Rules – bepalen AI gedrag
-00-project-context.mdc              # Context: stack, doelen, outputverwachting
-01-hw-style-guide.mdc               # Stijl- en naming-conventies
-02-docs-precedence.mdc              # Altijd lokale HW-docs/snippets prefereren
-03-ts-globs.mdc                     # Regels voor TS-bestanden
-04-testing-playbook.mdc             # Test- en reviewchecklist
-05-hw-api-events-materials.mdc      # Samenvatting Entity API / Events / Materials / Utils
-06-hw-api-index.mdc                 # Domein index (Analytics/Player/Camera/NavMesh/AvatarAI/UI)
-07-hw-api-url-index.mdc            # Volledige 2.0.0 API URL index (categorised)
-08-hw-stubs-and-scaffolds.mdc      # Uitleg & prompts voor lokale stubs en scaffolds
+📂 Folder Structure
 
-/horizon-worlds-rules/                # Lokale Horizon Worlds kennisbronnen
-HorizonWorldsSnippets-main/         # Snippets en patterns
-MetaWorldsSkydomeCapture-main/      # Sky dome capture scripts
-worlds-documentation-main/          # Documentatie (HTML/JS/CSS)
-worlds-documentation-main-2/        # Extra documentatie
-00 TS Utils/                        # Vidyuu utility scripts (motion, colors, arrays, popups, actions)
-stubs/                              # Type stubs voor kern-API's (offline hints)
-scaffolds/                          # Kleine helpers/managers voor snelle start
+/.cursor/rules/                      # Cursor Rules – define AI behavior
+00-project-context.mdc              # Context: stack, goals, output expectations
+01-hw-style-guide.mdc               # Style and naming conventions
+02-docs-precedence.mdc               # Always prefer local HW docs/snippets
+03-ts-globs.mdc                      # Rules for TS files
+04-testing-playbook.mdc              # Testing and review checklist
+05-hw-api-events-materials.mdc       # Summary of Entity API / Events / Materials / Utils
+06-hw-api-index.mdc                  # Domain index (Analytics/Player/Camera/NavMesh/AvatarAI/UI)
+07-hw-api-url-index.mdc              # Full 2.0.0 API URL index (categorized)
+08-hw-stubs-and-scaffolds.mdc        # Explanation & prompts for local stubs and scaffolds
 
-.cursorignore                         # Bestanden uitsluiten van indexering
-README.md                             # Deze handleiding
+/horizon-worlds-rules/                # Local Horizon Worlds knowledge sources
+HorizonWorldsSnippets-main/          # Snippets and patterns
+MetaWorldsSkydomeCapture-main/       # Sky dome capture scripts
+worlds-documentation-main/           # Documentation (HTML/JS/CSS)
+worlds-documentation-main-2/         # Extra documentation
+00 TS Utils/                         # Vidyuu utility scripts (motion, colors, arrays, popups, actions)
+stubs/                               # Type stubs for core APIs (offline hints)
+scaffolds/                           # Small helpers/managers for quick start
 
----
+.cursorignore                         # Files excluded from indexing
+README.md                             # This guide
 
-## 🚀 Gebruik in Cursor
+⸻
 
-1. **Project openen**
-   - Open deze map in Cursor.
-   - Cursor indexeert automatisch alle bestanden behalve wat in `.cursorignore` staat.
+🚀 Using in Cursor
+	1.	Open the project
+	•	Open this folder in Cursor.
+	•	Cursor will automatically index all files except those listed in .cursorignore.
+	2.	Check indexing
+	•	Go to Settings → Indexing & Docs in Cursor and make sure all folders are indexed.
+	•	You can add more exclusions to .cursorignore if needed.
+	3.	Give prompts
+	•	Directly reference files to get specific info/snippets:
+	•	@workspace HorizonWorldsSnippets-main/Snippets/PlayerManager.ts
+	•	@workspace worlds-documentation-main/docs/events.md
+	•	Example request:
+“Create an event listener like in HorizonWorldsSnippets-main/Snippets/EventBus.ts, but for player join/leave.”
+	4.	Check the rules
+	•	In @Cursor Rules you’ll see that 02-docs-precedence.mdc is active.
+	•	This ensures Cursor looks in your local folders before using external sources.
 
-2. **Controleren**
-   - Ga naar *Settings → Indexing & Docs* in Cursor en check of alle mappen worden geïndexeerd.
-   - In `.cursorignore` kun je zelf nog extra uitsluitingen toevoegen als nodig.
+⸻
 
-3. **Prompts geven**
-   - Verwijs direct naar bestanden om specifieke info/snippets te krijgen:
-     - `@workspace HorizonWorldsSnippets-main/Snippets/PlayerManager.ts`
-     - `@workspace worlds-documentation-main/docs/events.md`
-   - Vraag bijvoorbeeld:
-     > "Maak een eventlistener zoals in `HorizonWorldsSnippets-main/Snippets/EventBus.ts`, maar voor player join/leave."
+🔄 Reusing in Other Projects
+	1.	Copy these folders and files to the root of your new project:
+	•	.cursor/
+	•	horizon-worlds-rules/
+	•	.cursorignore
+	•	README.md (optional)
+	2.	Open the new project in Cursor.
+	3.	Done — Cursor will instantly use the same rules and documentation.
 
-4. **Rules checken**
-   - In *@Cursor Rules* kun je zien dat `02-docs-precedence.mdc` actief is.
-   - Dit zorgt ervoor dat Cursor eerst in je lokale mappen kijkt voordat het externe bronnen gebruikt.
+💡 Tip: Put this setup in a GitHub template repository.
+That way, you can always start with:
 
----
-
-## 🔄 Hergebruik in andere projecten
-
-1. Kopieer deze mappen en bestanden naar de root van je nieuwe project:
-   - `.cursor/`
-   - `horizon-worlds-rules/`
-   - `.cursorignore`
-   - `README.md` (optioneel)
-2. Open het nieuwe project in Cursor.
-3. Klaar — Cursor gebruikt direct dezelfde rules en documentatie.
-
-💡 Tip: Zet deze setup in een **GitHub template repository**.  
-Zo kun je altijd starten met:
-```bash
 git clone https://github.com/JoshuaLevi/Meta-Horizon-Worlds-Cursor-Rules.git my-horizon-world
-
-
 
 
 All the API reference links:
